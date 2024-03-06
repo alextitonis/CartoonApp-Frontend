@@ -36,13 +36,22 @@ function App() {
       tone,
       themes: themes.split(","),
     };
-    const resp = await axios.post(
-      "https://corsdada-21e7f4fc4c59.herokuapp.com/https://sadfsaf-825c0c40ca76.herokuapp.com/generate",
-      body
-    );
-    console.log(resp.data);
-    setResponse(resp.data);
-    setGenerating(false);
+    try {
+      const resp = await axios.post(
+        "https://corsdada-21e7f4fc4c59.herokuapp.com/http://34.16.171.165:3000/generate",
+        body,
+        {
+          timeout: 60000, // Reduced timeout for testing
+        }
+      );
+      console.log(resp.data);
+      setResponse(resp.data);
+      setGenerating(false);
+    } catch (error) {
+      console.error("Error occurred during request:", error);
+      // Handle error here, e.g., show a message to the user
+      setGenerating(false);
+    }
   };
 
   const renderInputs = () => {
