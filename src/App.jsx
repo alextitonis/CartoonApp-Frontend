@@ -37,11 +37,15 @@ function App() {
       themes: themes.split(","),
     };
     try {
+      const agent = new https.Agent({
+        rejectUnauthorized: false,
+      });
       const resp = await axios.post(
         "http://34.16.171.165:3000/generate",
         body,
         {
-          timeout: 60000, // Reduced timeout for testing
+          timeout: 60000,
+          httpAgent: agent,
         }
       );
       console.log(resp.data);
