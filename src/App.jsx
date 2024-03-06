@@ -38,7 +38,7 @@ function App() {
     };
     try {
       const resp = await axios.post(
-        "https://corsdada-21e7f4fc4c59.herokuapp.com/http://34.16.171.165:3000/generate",
+        "http://34.16.171.165:3000/generate",
         body,
         {
           timeout: 60000, // Reduced timeout for testing
