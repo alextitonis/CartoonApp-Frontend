@@ -42,7 +42,6 @@ function App() {
         body,
         {
           timeout: 60000,
-          httpAgent: agent,
         }
       );
       console.log(resp.data);
