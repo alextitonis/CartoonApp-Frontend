@@ -1,4 +1,5 @@
 import { useState } from "react";
+import generateStory from "./ai.js";
 import axios from "axios";
 import "./App.css";
 
@@ -36,9 +37,14 @@ function App() {
       tone,
       themes: themes.split(","),
     };
-    const resp = await axios.post("https://cartoontestapp-8d032af8ae3f.herokuapp.com/generate", body);
-    console.log(resp.data);
-    setResponse(resp.data);
+    const resp = await generateStory(prompt, character, {
+      genre,
+      style,
+      tone,
+      themes: themes.split(","),
+    });
+    console.log(resp);
+    setResponse(resp);
     setGenerating(false);
   };
 
