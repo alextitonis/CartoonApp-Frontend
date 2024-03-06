@@ -36,7 +36,7 @@ function App() {
       tone,
       themes: themes.split(","),
     };
-    const resp = await axios.post("http://localhost:3000/generate", body);
+    const resp = await axios.post("https://cartoontestapp-8d032af8ae3f.herokuapp.com/generate", body);
     console.log(resp.data);
     setResponse(resp.data);
     setGenerating(false);
