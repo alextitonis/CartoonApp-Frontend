@@ -14,9 +14,12 @@
     "axios": "^1.6.7",
     "buffer": "^6.0.3",
     "dotenv": "^16.4.5",
+    "https-agent": "^1.0.0",
+    "https-browserify": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "replicate": "^0.27.1"
+    "replicate": "^0.27.1",
+    "vite-plugin-node-polyfills": "^0.21.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
