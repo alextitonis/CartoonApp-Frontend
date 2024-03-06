@@ -1,5 +1,4 @@
 import { useState } from "react";
-import generateStory from "./ai.js";
 import axios from "axios";
 import "./App.css";
 
@@ -37,14 +36,12 @@ function App() {
       tone,
       themes: themes.split(","),
     };
-    const resp = await generateStory(prompt, character, {
-      genre,
-      style,
-      tone,
-      themes: themes.split(","),
-    });
-    console.log(resp);
-    setResponse(resp);
+    const resp = await axios.post(
+      "https://corsdada-21e7f4fc4c59.herokuapp.com/https://sadfsaf-825c0c40ca76.herokuapp.com/generate",
+      body
+    );
+    console.log(resp.data);
+    setResponse(resp.data);
     setGenerating(false);
   };
 

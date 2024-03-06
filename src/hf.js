@@ -1,12 +1,12 @@
 import { HfInference } from "@huggingface/inference";
+import dotenv from "dotenv";
 import Replicate from "replicate";
-const key = "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";
+dotenv.config();
+const key = process.env.HF_API_KEY;
 const hf = new HfInference(key);
 const replicate = new Replicate({
-  auth: "r8_VJloyKSeQIhNprd2sTkct0B2xFYJsZM0ea8pO",
+  auth: process.env.REPLICATE_API_TOKEN,
 });
-import { Buffer } from "buffer";
-window.Buffer = window.Buffer || Buffer;
 
 export const getHf = () => {
   return hf;
