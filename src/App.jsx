@@ -41,7 +41,7 @@ function App() {
         "http://34.16.171.165:3000/generate",
         body,
         {
-          timeout: 60000,
+          timeout: 6000000000,
         }
       );
       console.log(resp.data);
