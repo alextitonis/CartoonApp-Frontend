@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 import "./App.css";
+import { story } from "./story.js";
+import StoryRenderer from "./StoryRenderer.jsx";
 
 function App() {
   const [prompt, setPrompt] = useState(
@@ -12,7 +14,7 @@ function App() {
   const [tone, setTone] = useState("Serious");
   const [themes, setThemes] = useState("Post Apocalyptic, Terror, Death");
   const [generating, setGenerating] = useState(false);
-  const [response, setResponse] = useState(null);
+  const [response, setResponse] = useState(story);
 
   const clear = () => {
     setResponse(null);
@@ -37,19 +39,14 @@ function App() {
       themes: themes.split(","),
     };
     try {
-      const resp = await axios.post(
-        "http://34.16.171.165:3000/generate",
-        body,
-        {
-          timeout: 6000000000,
-        }
-      );
+      const resp = await axios.post("http://127.0.0.1:3000/generate", body, {
+        timeout: 6000000000,
+      });
       console.log(resp.data);
       setResponse(resp.data);
       setGenerating(false);
     } catch (error) {
       console.error("Error occurred during request:", error);
-      // Handle error here, e.g., show a message to the user
       setGenerating(false);
     }
   };
@@ -126,6 +123,7 @@ function App() {
   };
 
   const renderResponse = () => {
+    return <StoryRenderer story={response} />;
     return (
       <div>
         <h1>Generated Panels</h1>
