@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import HTMLFlipBook from "react-pageflip";
+import { Box } from "@mui/material";
 
 const Page = React.forwardRef((props, ref) => {
   return (
@@ -13,31 +14,50 @@ const Page = React.forwardRef((props, ref) => {
 export default function StoryRenderer(props) {
   const audioRefs = useRef([]);
 
-  useEffect(() => {
-    audioRefs.current.forEach((audio) => {
-      audio.play();
-    });
-  }, []);
+  const handlePageFlip = (e) => {
+    const currentPage = e.data;
+    const audioToPlay = audioRefs.current[currentPage];
+
+    if (audioToPlay) {
+      audioToPlay.play();
+      audioRefs.current.forEach((audio, index) => {
+        if (index !== currentPage) {
+          audio.pause();
+        }
+      });
+    }
+  };
 
   return (
-    <HTMLFlipBook width={300} height={500}>
-      {props.story.map((panel, index) => (
-        <Page key={index} number={index + 1}>
-          <center>
-            <img
-              src={panel.img || ""}
-              alt={`Panel ${index + 1}`}
-              style={{ width: "400px", height: "400px" }}
-            />
-            <br />
-            <audio ref={(ref) => (audioRefs.current[index] = ref)} controls autoPlay>
-              <source src={panel.audio} type="audio/mp3" />
-              Your browser does not support the audio element.
-            </audio>
-            <p>{panel.dialogue}</p>
-          </center>
-        </Page>
-      ))}
-    </HTMLFlipBook>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
+      <HTMLFlipBook width={300} height={500} onFlip={handlePageFlip}>
+        {props.story.map((panel, index) => (
+          <Page key={index} number={index + 1}>
+            <Box sx={{ textAlign: "center" }}>
+              <img
+                src={panel.img || ""}
+                alt={`Panel ${index + 1}`}
+                style={{ maxWidth: "100%", maxHeight: "100%" }}
+              />
+              <br />
+              {panel.audio && (
+                <audio ref={(ref) => (audioRefs.current[index] = ref)} controls>
+                  <source src={panel.audio} type="audio/mp3" />
+                  Your browser does not support the audio element.
+                </audio>
+              )}
+              <p>{panel.dialogue}</p>
+            </Box>
+          </Page>
+        ))}
+      </HTMLFlipBook>
+    </Box>
   );
 }

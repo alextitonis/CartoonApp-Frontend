@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/styled": "^11.11.0",
     "@huggingface/inference": "^2.6.4",
+    "@mui/material": "^5.15.12",
     "axios": "^1.6.7",
     "buffer": "^6.0.3",
     "dotenv": "^16.4.5",
