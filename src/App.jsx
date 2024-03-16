@@ -18,7 +18,7 @@ function App() {
   const [character, setCharacter] = useState("");
   const [genre, setGenre] = useState("");
   const [style, setStyle] = useState("");
-  const [tone, setTone] = useState("Serious");
+  const [tone, setTone] = useState("");
   const [themes, setThemes] = useState("");
   const [generating, setGenerating] = useState(false);
   const [response, setResponse] = useState(null);
@@ -43,11 +43,6 @@ function App() {
     }
 
     setGenerating(true);
-    await wait(2);
-    const newStory = [title, ...story];
-    setResponse(newStory);
-    setGenerating(false);
-    /*
     const body = {
       prompt,
       character,
@@ -60,13 +55,14 @@ function App() {
       const resp = await axios.post("http://34.16.171.165:3000/generate", body, {
         timeout: 6000000000,
       });
+      const title = prompt;
       const newStory = [title, ...resp.data];
       setResponse(newStory);
     } catch (error) {
       console.error("Error occurred during request:", error);
     } finally {
       setGenerating(false);
-    }*/
+    }
   };
 
   return (
