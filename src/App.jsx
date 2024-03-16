@@ -13,13 +13,13 @@ import { story, title } from "./story.js";
 
 function App() {
   const [prompt, setPrompt] = useState(
-    "An astronaut alone in the vast universe"
+    ""
   );
-  const [character, setCharacter] = useState("John");
-  const [genre, setGenre] = useState("Horror");
-  const [style, setStyle] = useState("Scary");
+  const [character, setCharacter] = useState("");
+  const [genre, setGenre] = useState("");
+  const [style, setStyle] = useState("");
   const [tone, setTone] = useState("Serious");
-  const [themes, setThemes] = useState("Post Apocalyptic, Terror, Death");
+  const [themes, setThemes] = useState("");
   const [generating, setGenerating] = useState(false);
   const [response, setResponse] = useState(null);
 
@@ -57,7 +57,7 @@ function App() {
       themes: themes.split(","),
     };
     try {
-      const resp = await axios.post("http://127.0.0.1:3000/generate", body, {
+      const resp = await axios.post("http://34.16.171.165:3000/generate", body, {
         timeout: 6000000000,
       });
       const newStory = [title, ...resp.data];
