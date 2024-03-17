@@ -7,13 +7,13 @@ import {
   Container,
   Typography,
   Box,
+  Tooltip,
 } from "@mui/material";
 import StoryRenderer from "./StoryRenderer.jsx";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-const fileserverUrl =
-  "https://fileserverfairytalechat-33d4dd18703c.herokuapp.com";
+import { API_URL, FILESERVER_URL } from "./vars/constants.js";
+import getRandomExample from "./vars/examples.js";
 
 function App() {
   const [prompt, setPrompt] = useState("");
@@ -63,7 +63,7 @@ function App() {
     setGenerating(true);
     try {
       const imageUrl = await axios.post(
-        `${fileserverUrl}/upload`,
+        `${FILESERVER_URL}/upload`,
         {
           img: characterImage,
         },
@@ -84,13 +84,9 @@ function App() {
         tone,
         themes: themes.split(","),
       };
-      const resp = await axios.post(
-        "http://34.16.171.165:3000/generate",
-        body,
-        {
-          timeout: 6000000000,
-        }
-      );
+      const resp = await axios.post(`${API_URL}/generate`, body, {
+        timeout: 6000000000,
+      });
       const title = prompt;
       const newStory = [title, ...resp.data];
       toast.success("Story generated successfully");
@@ -101,6 +97,17 @@ function App() {
     } finally {
       setGenerating(false);
     }
+  };
+
+  const randomize = () => {
+    const example = getRandomExample();
+    setPrompt(example.prompt);
+    setCharacter(example.character);
+    setGenre(example.genre);
+    setStyle(example.style);
+    setTone(example.tone);
+    setThemes(example.themes);
+    setCharacterImage(example.image);
   };
 
   return (
@@ -127,71 +134,87 @@ function App() {
               <Typography variant="h4" gutterBottom>
                 Cartoon Generator
               </Typography>
-              <TextField
-                label="Prompt"
-                variant="outlined"
-                fullWidth
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                sx={{ marginBottom: 2 }}
-              />
-              <TextField
-                label="Character Name"
-                variant="outlined"
-                fullWidth
-                value={character}
-                onChange={(e) => setCharacter(e.target.value)}
-                sx={{ marginBottom: 2 }}
-              />
-              <input
-                accept="image/png, image/jpeg"
-                id="character-image"
-                type="file"
-                onChange={handleFileChange}
-                style={{ display: "none" }}
-              />
-              <label htmlFor="character-image">
-                <Button variant="contained" component="span">
-                  Upload Character Image
-                </Button>
-              </label>
+              <Tooltip title="Enter the prompt for your story">
+                <TextField
+                  label="Prompt"
+                  variant="outlined"
+                  fullWidth
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  sx={{ marginBottom: 2 }}
+                />
+              </Tooltip>
+              <Tooltip title="Enter the name of your character">
+                <TextField
+                  label="Character Name"
+                  variant="outlined"
+                  fullWidth
+                  value={character}
+                  onChange={(e) => setCharacter(e.target.value)}
+                  sx={{ marginBottom: 2 }}
+                />
+              </Tooltip>
+              <Tooltip title="Upload an image for your character">
+                <div>
+                  <input
+                    accept="image/png, image/jpeg"
+                    id="character-image"
+                    type="file"
+                    onChange={handleFileChange}
+                    style={{ display: "none" }}
+                  />
+                  <label htmlFor="character-image">
+                    <Button variant="contained" component="span">
+                      Upload Character Image
+                    </Button>
+                  </label>
+                </div>
+              </Tooltip>
               <br />
               {characterImage && (
                 <img src={characterImage} alt="Character" width="100" />
               )}
               <br />
-              <TextField
-                label="Genre"
-                variant="outlined"
-                fullWidth
-                value={genre}
-                onChange={(e) => setGenre(e.target.value)}
-                sx={{ marginBottom: 2 }}
-              />
-              <TextField
-                label="Style"
-                variant="outlined"
-                fullWidth
-                value={style}
-                onChange={(e) => setStyle(e.target.value)}
-                sx={{ marginBottom: 2 }}
-              />
-              <TextField
-                label="Tone"
-                variant="outlined"
-                fullWidth
-                value={tone}
-                onChange={(e) => setTone(e.target.value)}
-                sx={{ marginBottom: 2 }}
-              />
-              <TextField
-                label="Themes (comma-separated)"
-                variant="outlined"
-                fullWidth
-                value={themes}
-                onChange={(e) => setThemes(e.target.value)}
-                sx={{ marginBottom: 2 }}
-              />
+              <Tooltip title="Enter the genre of your story">
+                <TextField
+                  label="Genre"
+                  variant="outlined"
+                  fullWidth
+                  value={genre}
+                  onChange={(e) => setGenre(e.target.value)}
+                  sx={{ marginBottom: 2 }}
+                />
+              </Tooltip>
+              <Tooltip title="Enter the style of your story">
+                <TextField
+                  label="Style"
+                  variant="outlined"
+                  fullWidth
+                  value={style}
+                  onChange={(e) => setStyle(e.target.value)}
+                  sx={{ marginBottom: 2 }}
+                />
+              </Tooltip>
+              <Tooltip title="Enter the tone of your story">
+                <TextField
+                  label="Tone"
+                  variant="outlined"
+                  fullWidth
+                  value={tone}
+                  onChange={(e) => setTone(e.target.value)}
+                  sx={{ marginBottom: 2 }}
+                />
+              </Tooltip>
+              <Tooltip title="Enter the themes of your story (comma-separated)">
+                <TextField
+                  label="Themes"
+                  variant="outlined"
+                  fullWidth
+                  value={themes}
+                  onChange={(e) => setThemes(e.target.value)}
+                  sx={{ marginBottom: 2 }}
+                />
+              </Tooltip>
               <Button
                 variant="contained"
                 onClick={generate}
@@ -203,6 +226,19 @@ function App() {
                   "Generate"
                 )}
               </Button>
+              <Tooltip title="Get some interesting inputs">
+                <Button
+                  variant="contained"
+                  onClick={randomize}
+                  disabled={generating}
+                >
+                  {generating ? (
+                    <CircularProgress size={24} color="inherit" />
+                  ) : (
+                    "Magic"
+                  )}
+                </Button>
+              </Tooltip>
             </Box>
           )}
         </Box>
