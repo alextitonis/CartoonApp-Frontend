@@ -9,7 +9,6 @@ import {
   Box,
 } from "@mui/material";
 import StoryRenderer from "./StoryRenderer.jsx";
-import { story, title } from "./story.js";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
