@@ -10,12 +10,16 @@ import {
 } from "@mui/material";
 import StoryRenderer from "./StoryRenderer.jsx";
 import { story, title } from "./story.js";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const fileserverUrl =
+  "https://fileserverfairytalechat-33d4dd18703c.herokuapp.com";
 
 function App() {
-  const [prompt, setPrompt] = useState(
-    ""
-  );
+  const [prompt, setPrompt] = useState("");
   const [character, setCharacter] = useState("");
+  const [characterImage, setCharacterImage] = useState("");
   const [genre, setGenre] = useState("");
   const [style, setStyle] = useState("");
   const [tone, setTone] = useState("");
@@ -27,39 +31,74 @@ function App() {
     setResponse(null);
   };
 
-  const wait = (seconds) => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, seconds * 1000);
-    });
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setCharacterImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const generate = async () => {
     if (generating) {
+      toast.error("Please wait for the current request to finish");
       return;
     }
 
-    if (!prompt || !character || !genre || !style || !tone || !themes) {
+    if (
+      !prompt ||
+      !character ||
+      !genre ||
+      !style ||
+      !tone ||
+      !themes ||
+      !characterImage
+    ) {
+      toast.error("Please fill in all fields and upload an image");
       return;
     }
 
     setGenerating(true);
-    const body = {
-      prompt,
-      character,
-      genre,
-      style,
-      tone,
-      themes: themes.split(","),
-    };
     try {
-      const resp = await axios.post("http://34.16.171.165:3000/generate", body, {
-        timeout: 6000000000,
-      });
+      const imageUrl = await axios.post(
+        `${fileserverUrl}/upload`,
+        {
+          img: characterImage,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const url = imageUrl.data.imageUrl;
+      console.log(url);
+      const body = {
+        prompt,
+        character,
+        characterImage: url,
+        genre,
+        style,
+        tone,
+        themes: themes.split(","),
+      };
+      const resp = await axios.post(
+        "http://34.16.171.165:3000/generate",
+        body,
+        {
+          timeout: 6000000000,
+        }
+      );
       const title = prompt;
       const newStory = [title, ...resp.data];
+      toast.success("Story generated successfully");
       setResponse(newStory);
     } catch (error) {
       console.error("Error occurred during request:", error);
+      toast.error("An error occurred during the request");
     } finally {
       setGenerating(false);
     }
@@ -105,6 +144,23 @@ function App() {
                 onChange={(e) => setCharacter(e.target.value)}
                 sx={{ marginBottom: 2 }}
               />
+              <input
+                accept="image/png, image/jpeg"
+                id="character-image"
+                type="file"
+                onChange={handleFileChange}
+                style={{ display: "none" }}
+              />
+              <label htmlFor="character-image">
+                <Button variant="contained" component="span">
+                  Upload Character Image
+                </Button>
+              </label>
+              <br />
+              {characterImage && (
+                <img src={characterImage} alt="Character" width="100" />
+              )}
+              <br />
               <TextField
                 label="Genre"
                 variant="outlined"
@@ -152,6 +208,7 @@ function App() {
           )}
         </Box>
       </Box>
+      <ToastContainer />
     </Container>
   );
 }
