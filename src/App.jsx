@@ -62,23 +62,10 @@ function App() {
 
     setGenerating(true);
     try {
-      const imageUrl = await axios.post(
-        `${FILESERVER_URL}/upload`,
-        {
-          img: characterImage,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const url = imageUrl.data.imageUrl;
-      console.log(url);
       const body = {
         prompt,
         character,
-        characterImage: url,
+        characterImage,
         genre,
         style,
         tone,
