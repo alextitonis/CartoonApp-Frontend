@@ -53,15 +53,17 @@ const LandingPage = () => {
         <Typography variant="h4" gutterBottom>
           Explore Infinite Stories Today
         </Typography>
+        <br />
+        <Button variant="contained" color="primary" href="/#/app">
+          Start Reading
+        </Button>
+        &nbsp;&nbsp;&nbsp;
         <Button
           variant="contained"
           color="primary"
           onClick={() => setOpen(true)}
         >
           Register
-        </Button>
-        <Button variant="contained" color="primary" href="/app">
-          Start Reading
         </Button>
       </header>
 
@@ -175,36 +177,13 @@ const LandingPage = () => {
 
       {/* Get in Touch section */}
       <div style={{ padding: "20px", textAlign: "center" }}>
-        <Typography variant="h5" gutterBottom>
-          Get in Touch
-        </Typography>
-        <form
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <TextField
-            label="Your Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ marginBottom: "20px" }}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleEmailSubmit}
-            style={{ marginBottom: "20px" }}
-          >
-            Submit
-          </Button>
-        </form>
         <div>
           <IconButton>
             <FaTwitter />
           </IconButton>
-          <IconButton>
+          <IconButton onClick={() => {
+            window.open('https://discord.gg/yhQJ7khKaz', '_blank');
+          }}>
             <FaDiscord />
           </IconButton>
         </div>
