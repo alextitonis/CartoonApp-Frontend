@@ -6,8 +6,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/app" element={<Generator />} />
+        <Route path="/" element={<Generator />} />
       </Routes>
     </Router>
   );
